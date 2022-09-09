@@ -3,8 +3,6 @@ import java.util.*;
 class BST
 {
 	Node root;
-
-
 	class Node
 	{
 		int data;
@@ -80,10 +78,185 @@ class BST
 		}
 	}
 
-	void display_Prerder()
+	void display_Preorder()
 	{
 
+		Stack<Node> st=new Stack<Node>();
+		st.push(root);
+		while(st.size()>0)
+		{
+			Node temp=st.pop();
+			System.out.print(temp.data+" ");
+			if(temp.right!=null)
+			{
+				st.push(temp.right);
+			}
+
+			if(temp.left!=null)
+			{
+				st.push(temp.left);
+			}
+		}
+
 	}
+
+	void display_Postorder()
+	{
+		Stack<Node> st1=new Stack<Node>();
+		Stack<Node> st2=new Stack<Node>();
+		st1.push(root);
+		while(st1.size()>0)
+		{
+			Node temp=st1.pop();
+			st2.push(temp);
+			if(temp.left!=null)
+			{
+				st1.push(temp.left);
+			}
+
+			if(temp.right!=null)
+			{
+				st1.push(temp.right);
+			}
+		}
+		while(st2.size()>0)
+		{
+			Node temp=st2.pop();
+			System.out.print(temp.data+" ");
+		}
+	}
+	void delete_leafnode(int a)
+	{
+		Node parent=null;
+		Node temp=root;
+		while(temp!=null && temp.data!=a)
+		{
+			parent=temp;
+			if(a>temp.data)
+			{
+				temp=temp.right;
+			}
+
+			else
+			{
+				temp=temp.left;
+			}
+		}
+
+		if(temp.left==null && temp.right==null)
+		{
+			if(parent.data>temp.data)
+			{
+				parent.left=null;
+			}
+			else
+			{
+				parent.right=null;
+			}
+		}
+	}
+
+	void delete_1child(int a)
+	{
+		Node parent=null;
+		Node temp=root;
+
+		while(temp!=null && temp.data!=a)
+		{
+			parent=temp;
+			if(a>temp.data)
+			{
+				temp=temp.right;
+			}
+			else
+			{
+				temp=temp.left;
+			}
+		}
+
+		if(temp.left!=null && temp.right==null)
+		{
+			if(temp.data>parent.data)
+			{
+				parent.right=temp.left;
+			}
+			else
+			{
+				parent.left=temp.left;
+			}if(temp.left!=null && temp.right==null)
+		{
+			if(temp.data>parent.data)
+			{
+				parent.left=temp.left;
+			}
+			else
+			{
+				parent.right=temp.right;
+			}
+		}
+		}
+
+		if(temp.left==null && temp.right!=null)
+		{
+			if(temp.data>parent.data)
+			{
+				parent.right=temp.right;
+			}
+			else
+			{
+				parent.left=temp.right;
+			}
+		}
+	}
+
+	void delete_2child(int a)
+	{
+		Node parent=null;
+		Node temp=root;
+
+		while(temp!=null && temp.data!=a)
+		{
+			parent=temp;
+			if(a>temp.data)
+			{
+				temp=temp.right;
+			}
+			else
+			{
+				temp=temp.left;
+			}
+		}
+
+		if(temp.left!=null && temp.right!=null)
+		{
+			Node t=inorder_succesor(temp);
+			temp.data=t.data;
+		}
+	}
+	Node inorder_succesor(Node n)
+		{
+			boolean rightchild=true;
+			Node parent=n;
+			n=n.right;
+			if(n.left!=null)
+			{
+				rightchild=false;
+			}
+			while(n.left!=null)
+			{
+				parent=n;
+				n=n.left;
+			}
+			if(rightchild)
+			{
+				parent.right=n.right;
+			}
+			else
+			{
+				parent.left=n.right;
+			}
+			return n;
+		}
 }
 
 public class Tree
@@ -92,14 +265,46 @@ public class Tree
 	{
 		Scanner sc=new Scanner(System.in);
 		BST obj=new BST();
+		obj.insert(8);
 		obj.insert(3);
-		obj.insert(4);
+		obj.insert(11);
 		obj.insert(5);
-		obj.insert(6);
 		obj.insert(9);
-		obj.insert(7);
-		obj.insert(2);
-		obj.insert(1);
-		obj.display_Inorder();
+		obj.insert(12);
+		obj.insert(13);
+		obj.insert(4);
+		obj.insert(6);
+		obj.insert(20);
+
+		System.out.println("Leafnode delete 7");
+		obj.delete_leafnode(20); 
+		System.out.print("\n");
+
+		System.out.println("delete one child parent");
+		obj.delete_1child(12); 
+		System.out.print("\n");
+
+		System.out.println("delete two child parent");
+		obj.delete_2child(8); 
+		System.out.print("\n");
+
+		System.out.println("Inorder Traversal");
+		obj.display_Inorder(); 
+		System.out.print("\n");
+
+
+		System.out.println("Preorder Traversal");
+		obj.display_Preorder(); 
+		System.out.print("\n");
+
+
+		System.out.println("Postorder Traversal");
+		obj.display_Postorder(); 
+		System.out.print("\n");
+
+
+
+
+
 	}
 }
